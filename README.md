@@ -1,21 +1,20 @@
-Project Empath: The AI-Powered Social Cue Tutor
+# Project Clarity: The AI-Powered Social Cue Assistant
 
-A real-time digital coach helping individuals with NVLD and ASD navigate the social world with confidence.
+A real-time digital coach helping individuals with non-verbal learning disorder (NVLD), such as Autisum Spectrum Disorder, to navigate the social world with confidence.
 
-    The Problem: When the Social World is a Foreign Language
+## Problem
 
-    For many people, especially those with conditions like Nonverbal Learning Disorder (NVLD) or Autism Spectrum Disorder (ASD), the social world can feel like a constant puzzle. Essential social cues that many of us take for granted—a subtle smile, a brief frown, a look of surprise—can be incredibly difficult to interpret. This can lead to misunderstandings, social anxiety, and challenges in forming meaningful relationships. How can you build connections when you're struggling to read the emotional subtitles of a conversation?
+While many of us may not realize it, we are constantly using social cues, such as a subtle smile, a brief frown, a look of surpriseto, to help us understand one another. For many people, however, especially those with conditions like Nonverbal Learning Disorder (NVLD) or Autism Spectrum Disorder (ASD), it can be challenging to communicate with others as they may struggle to pick up on social cues. This can lead to misunderstandings, social anxiety, and challenges in forming meaningful relationships.
 
-Our Solution: Real-Time Subtitles for Social Cues
+## Our Solution
 
-Project Empath is a revolutionary web tool that acts as a private, real-time social cue interpreter. It uses a standard webcam to analyze the facial expressions of the person you are interacting with, providing simple, discreet feedback to help you understand the emotional context of the conversation.
+Project Clarity is a web-first tool that acts as a real-time social cue interpreter. It uses a webcam to analyze the facial expressions of the person you are interacting with and provide either textual or auditory feedback to help you understand the emotional context of the conversation.
 
-It's a practice tool, a confidence booster, and a live assistant, all designed to empower users to engage in social situations more effectively and with less anxiety.
-✨ Key Features & "Wow" Factor
 
-    Real-Time Facial Expression Analysis: Project Empath uses an advanced AI model to instantly "read" the face of the person on camera and identify key emotions like happiness, sadness, or neutrality.
+## Key Features
 
-    Discreet & Simple Feedback: The interface is designed to be a private coach, not a distraction. A clean, simple panel sits next to the video feed, providing an unobtrusive icon and a one-word description of the detected emotion (e.g., "😊 Happy," "😟 Sad").
+- Real-Time Facial Expression Analysis: Project Empath uses the FER Computer Vision AI model to instantly "read" the face of the person on camera and identify key emotions like happiness, sadness, or neutrality.
+- Discreet & Simple Feedback: The interface is designed to be a private coach, not a distraction. A clean, simple panel sits next to the video feed, providing an unobtrusive icon and a one-word description of the detected emotion (e.g., "😊 Happy," "😟 Sad").
 
     Practice Mode for Skill Building: Users can practice in a safe environment by watching videos, movies, or talking with a friend or family member to learn and associate facial expressions with their corresponding emotions.
 
