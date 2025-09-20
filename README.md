@@ -51,8 +51,8 @@ Prerequisites
 Clone the repository, navigate to the project folder, and install the required dependencies.
 
 # Clone the repository
-git clone <your-repo-url>
-cd <your-repo-folder>
+git clone <https://github.com/samuelyoon29/Assisted-Emotions.git>
+cd <Assisted-Emotions>
 
 # Install Python libraries
 pip install -r requirements.txt
