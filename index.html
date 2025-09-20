@@ -5,47 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accessibility Communicator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* bg-gray-900 */
+            background-color: #030712; /* bg-gray-950 */
         }
-        #status-panel {
+        #status-panel, #video-container {
             transition: background-color 0.7s ease, border-color 0.7s ease;
         }
         .icon {
-            font-size: 80px;
+            font-size: 5rem; /* 80px */
             line-height: 1;
+        }
+        /* Style for the webcam video feed */
+        #webcam {
+            width: 100%;
+            height: auto;
+            border-radius: 0.75rem; /* rounded-xl */
+            transform: scaleX(-1); /* Mirror the video */
+        }
+        /* Pulsing "Live" indicator */
+        .live-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen text-white p-4">
+<body class="flex flex-col items-center justify-center min-h-screen text-white p-4 md:p-8">
 
-    <div class="w-full max-w-2xl text-center mb-6">
+    <div class="w-full max-w-5xl text-center mb-8">
         <h1 class="text-4xl font-bold text-cyan-400">Accessibility Communicator</h1>
-        <p class="text-gray-400 mt-2">A real-time, non-verbal communication aid.</p>
+        <p class="text-gray-400 mt-2">Real-time, non-verbal communication powered by AI.</p>
     </div>
 
-    <!-- The main status display panel -->
-    <div id="status-panel" class="w-full max-w-2xl bg-gray-800 rounded-2xl shadow-lg p-8 border-4 border-gray-700">
-        <!-- Emotional State Section -->
-        <div class="flex flex-col items-center border-b-2 border-gray-600 pb-6">
-            <h2 class="text-2xl font-semibold text-gray-300 mb-4">Current Emotional State</h2>
-            <div id="emotion-icon" class="icon">😐</div>
-            <p id="emotion-text" class="text-xl mt-2 font-medium text-gray-400">Neutral</p>
+    <!-- Main container for video and status panel -->
+    <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Left Column: Video Feed -->
+        <div id="video-container" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold text-gray-300">Live Camera Feed</h2>
+                <div class="flex items-center gap-2 px-3 py-1 bg-red-600 rounded-full text-sm">
+                    <div class="w-2 h-2 bg-white rounded-full live-dot"></div>
+                    LIVE
+                </div>
+            </div>
+            <!-- The video element is now visible -->
+            <video id="webcam" autoplay playsinline muted></video>
         </div>
 
-        <!-- Card Communication Section -->
-        <div class="flex flex-col items-center pt-6 mt-2">
-            <h2 class="text-2xl font-semibold text-gray-300 mb-4">Communicator Card</h2>
-            <div id="card-icon" class="icon">⚪</div>
-            <p id="card-text" class="text-xl mt-2 font-medium text-gray-400">No card detected</p>
+        <!-- Right Column: Status Panel -->
+        <div id="status-panel" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700 flex flex-col justify-center">
+            <!-- Emotional State Section -->
+            <div class="flex flex-col items-center border-b-2 border-gray-700 pb-6">
+                <h2 class="text-2xl font-semibold text-gray-300 mb-4">Current Emotional State</h2>
+                <div id="emotion-icon" class="icon">😐</div>
+                <p id="emotion-text" class="text-xl mt-4 font-medium text-gray-300">Neutral</p>
+            </div>
+
+            <!-- Card Communication Section -->
+            <div class="flex flex-col items-center pt-6 mt-2">
+                <h2 class="text-2xl font-semibold text-gray-300 mb-4">Communicator Card</h2>
+                <div id="card-icon" class="icon">⚪</div>
+                <p id="card-text" class="text-xl mt-4 font-medium text-gray-300">No card detected</p>
+            </div>
         </div>
-    </div>
+    </main>
     
-    <p id="status" class="mt-6 text-gray-500 h-6">Initializing webcam...</p>
-    
-    <video id="webcam" style="display:none;" autoplay playsinline></video>
+    <p id="status" class="mt-8 text-gray-500 h-6">Initializing webcam...</p>
     <canvas id="canvas" style="display:none;"></canvas>
 
     <script>
@@ -54,6 +87,7 @@
         const canvas = document.getElementById('canvas');
         const status = document.getElementById('status');
         const statusPanel = document.getElementById('status-panel');
+        const videoContainer = document.getElementById('video-container');
         
         const emotionIcon = document.getElementById('emotion-icon');
         const emotionText = document.getElementById('emotion-text');
@@ -61,16 +95,15 @@
         const cardIcon = document.getElementById('card-icon');
         const cardText = document.getElementById('card-text');
 
+        // IMPORTANT: Update this URL once your backend is deployed!
         const API_URL = 'http://127.0.0.1:5000/process_frame'; 
         let isProcessing = false;
         
-        // --- Emojis and Meanings ---
         const EMOTION_MAP = {
             happy: { icon: '😊', text: 'Happy / Content', color: '#10B981' }, // Green-500
             sad: { icon: '😟', text: 'Sad / Distressed', color: '#3B82F6' }, // Blue-500
-            neutral: { icon: '😐', text: 'Neutral', color: '#6B7280' } // Gray-500
+            neutral: { icon: '😐', text: 'Neutral', color: '#4B5563' } // Gray-600
         };
-
         const CARD_MAP = {
             'Help/Pain': { icon: '🔴', text: 'Needs Help / In Pain' },
             'Yes/OK': { icon: '🟢', text: 'Yes / I am OK' },
@@ -78,7 +111,6 @@
             'default': { icon: '⚪', text: 'No card detected' }
         };
 
-        // --- 1. Webcam Setup ---
         async function setupWebcam() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -90,7 +122,6 @@
             }
         }
 
-        // --- 2. Capture and Send Frame ---
         async function processFrame() {
             if (video.readyState < 2 || isProcessing) return;
             isProcessing = true;
@@ -111,35 +142,33 @@
                 const data = await response.json();
                 updateUI(data);
             } catch (error) {
-                status.textContent = 'Cannot connect to the Python server.';
+                status.textContent = 'Error: Cannot connect to the deployed backend.';
                 console.error('Error sending frame to server:', error);
             } finally {
                 isProcessing = false;
             }
         }
 
-        // --- 3. Update UI with AI Analysis ---
         function updateUI(data) {
-            // Update emotion display
             const emotion = EMOTION_MAP[data.emotion] || EMOTION_MAP['neutral'];
             emotionIcon.textContent = emotion.icon;
             emotionText.textContent = emotion.text;
-            statusPanel.style.borderColor = emotion.color; // Main feedback color
+            
+            const panelBorderColor = emotion.color;
+            statusPanel.style.borderColor = panelBorderColor;
+            videoContainer.style.borderColor = panelBorderColor;
 
-            // Update card display
             const card = CARD_MAP[data.card_meaning] || CARD_MAP['default'];
             cardIcon.textContent = card.icon;
             cardText.textContent = card.text;
             
-            // Change background color based on card for high visibility
             if (data.card_meaning !== 'default') {
-                statusPanel.style.backgroundColor = data.color + '33'; // Set background to a transparent version of the card color
+                statusPanel.style.backgroundColor = data.color + '26';
             } else {
-                 statusPanel.style.backgroundColor = '#1F2937'; // bg-gray-800
+                 statusPanel.style.backgroundColor = '#111827'; // bg-gray-900
             }
         }
 
-        // --- Main Execution ---
         setupWebcam();
         video.addEventListener('loadeddata', () => {
             setInterval(processFrame, 500);
@@ -147,5 +176,4 @@
     </script>
 </body>
 </html>
-
 
