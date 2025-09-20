@@ -20,14 +20,12 @@
             font-size: 5rem; /* 80px */
             line-height: 1;
         }
-        /* Style for the webcam video feed */
         #webcam {
             width: 100%;
             height: auto;
             border-radius: 0.75rem; /* rounded-xl */
             transform: scaleX(-1); /* Mirror the video */
         }
-        /* Pulsing "Live" indicator */
         .live-dot {
             animation: pulse 2s infinite;
         }
@@ -44,10 +42,8 @@
         <p class="text-gray-400 mt-2">Real-time, non-verbal communication powered by AI.</p>
     </div>
 
-    <!-- Main container for video and status panel -->
     <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <!-- Left Column: Video Feed -->
         <div id="video-container" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-2xl font-semibold text-gray-300">Live Camera Feed</h2>
@@ -56,20 +52,16 @@
                     LIVE
                 </div>
             </div>
-            <!-- The video element is now visible -->
             <video id="webcam" autoplay playsinline muted></video>
         </div>
 
-        <!-- Right Column: Status Panel -->
         <div id="status-panel" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700 flex flex-col justify-center">
-            <!-- Emotional State Section -->
             <div class="flex flex-col items-center border-b-2 border-gray-700 pb-6">
                 <h2 class="text-2xl font-semibold text-gray-300 mb-4">Current Emotional State</h2>
                 <div id="emotion-icon" class="icon">😐</div>
                 <p id="emotion-text" class="text-xl mt-4 font-medium text-gray-300">Neutral</p>
             </div>
 
-            <!-- Card Communication Section -->
             <div class="flex flex-col items-center pt-6 mt-2">
                 <h2 class="text-2xl font-semibold text-gray-300 mb-4">Communicator Card</h2>
                 <div id="card-icon" class="icon">⚪</div>
@@ -78,7 +70,9 @@
         </div>
     </main>
     
-    <p id="status" class="mt-8 text-gray-500 h-6">Initializing webcam...</p>
+    <!-- This is the status message element that will be updated -->
+    <p id="status" class="mt-8 text-gray-500 h-6 font-semibold">Connecting to AI Server...</p>
+    
     <canvas id="canvas" style="display:none;"></canvas>
 
     <script>
@@ -95,10 +89,13 @@
         const cardIcon = document.getElementById('card-icon');
         const cardText = document.getElementById('card-text');
 
-        // IMPORTANT: Update this URL once your backend is deployed!
-        // const API_URL = 'http://127.0.0.1:5000/process_frame'; d
-        const API_URL = 'https://assisted-emotions.onrender.com backend URL';
+        // IMPORTANT: Remember to use your deployed backend URL here!
+        const API_URL = 'https://your-project-name.onrender.com/process_frame'; 
+        // For local testing: const API_URL = 'http://127.0.0.1:5000/process_frame';
+        
         let isProcessing = false;
+        // ** NEW: A flag to track if we have successfully connected at least once. **
+        let isConnected = false;
         
         const EMOTION_MAP = {
             happy: { icon: '😊', text: 'Happy / Content', color: '#10B981' }, // Green-500
@@ -116,9 +113,10 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 video.srcObject = stream;
-                status.textContent = 'Webcam active. Point at user or show a colored card.';
             } catch (err) {
-                status.textContent = 'Error: Could not access webcam. Please grant permission.';
+                status.textContent = '❌ Error: Webcam permission denied.';
+                status.classList.remove('text-gray-500');
+                status.classList.add('text-red-400');
                 console.error("Error accessing webcam: ", err);
             }
         }
@@ -140,10 +138,33 @@
                     body: JSON.stringify({ image: imageData })
                 });
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                
                 const data = await response.json();
+                
+                // ** NEW: Handle the successful connection message **
+                if (!isConnected) {
+                    isConnected = true;
+                    status.textContent = '✅ Connection to AI Server Successful!';
+                    status.classList.remove('text-gray-500', 'text-red-400');
+                    status.classList.add('text-green-400');
+
+                    // After a few seconds, change to a general status message
+                    setTimeout(() => {
+                        status.textContent = 'Analysis is running...';
+                        status.classList.remove('text-green-400');
+                        status.classList.add('text-gray-500');
+                    }, 2500);
+                }
+
                 updateUI(data);
+
             } catch (error) {
-                status.textContent = 'Error: Cannot connect to the deployed backend.';
+                // ** NEW: Handle the connection failure message **
+                if (!isConnected) {
+                    status.textContent = '❌ Error: Cannot connect to the deployed backend.';
+                    status.classList.remove('text-gray-500');
+                    status.classList.add('text-red-400');
+                }
                 console.error('Error sending frame to server:', error);
             } finally {
                 isProcessing = false;
@@ -164,15 +185,19 @@
             cardText.textContent = card.text;
             
             if (data.card_meaning !== 'default') {
-                statusPanel.style.backgroundColor = data.color + '26';
+                statusPanel.style.backgroundColor = data.color + '26'; // Adds transparency
             } else {
                  statusPanel.style.backgroundColor = '#111827'; // bg-gray-900
             }
         }
 
+        // --- Main Execution ---
         setupWebcam();
         video.addEventListener('loadeddata', () => {
-            setInterval(processFrame, 500);
+            // Start processing frames after a short delay to ensure everything is loaded.
+            setTimeout(() => {
+                setInterval(processFrame, 500);
+            }, 500);
         });
     </script>
 </body>
