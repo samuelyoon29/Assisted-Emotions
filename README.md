@@ -1,53 +1,45 @@
-# Assisted Emotions
+Project Empath: The AI-Powered Social Cue Tutor
 
-Project Iris: The AI-Powered Accessibility Communicator
+A real-time digital coach helping individuals with NVLD and ASD navigate the social world with confidence.
 
-A real-time, non-verbal communication bridge for those who need it most.
+    The Problem: When the Social World is a Foreign Language
 
-The Problem: A Silent Gap in Communication
+    For many people, especially those with conditions like Nonverbal Learning Disorder (NVLD) or Autism Spectrum Disorder (ASD), the social world can feel like a constant puzzle. Essential social cues that many of us take for granted—a subtle smile, a brief frown, a look of surprise—can be incredibly difficult to interpret. This can lead to misunderstandings, social anxiety, and challenges in forming meaningful relationships. How can you build connections when you're struggling to read the emotional subtitles of a conversation?
 
-For millions of individuals with non-verbal conditions—resulting from ALS, a stroke, severe autism, or other medical challenges—expressing fundamental needs and emotions is a daily struggle. Caregivers and loved ones are often left to guess, leading to frustration, misunderstanding, and a diminished quality of life for everyone involved. How can you communicate "I'm in pain" or "I'm happy" when you cannot speak?
+Our Solution: Real-Time Subtitles for Social Cues
 
-Our Solution: Giving a Voice to the Voiceless
+Project Empath is a revolutionary web tool that acts as a private, real-time social cue interpreter. It uses a standard webcam to analyze the facial expressions of the person you are interacting with, providing simple, discreet feedback to help you understand the emotional context of the conversation.
 
-Project Iris is a web-based application that transforms a standard webcam into an intelligent communication aid. By leveraging the power of real-time computer vision and AI, Iris analyzes facial expressions and simple colored cards to provide a clear, immediate, and accessible "status board" for caregivers.
-
-It's a simple, elegant solution that closes the communication gap, requiring no specialized hardware—just a browser and a camera.
+It's a practice tool, a confidence booster, and a live assistant, all designed to empower users to engage in social situations more effectively and with less anxiety.
 ✨ Key Features & "Wow" Factor
 
-    Real-time Emotion Detection: Using a sophisticated facial emotion recognition model, Iris instantly detects the user's emotional state (Happy/Content vs. Sad/Distressed) and displays it with a clear, intuitive icon.
+    Real-Time Facial Expression Analysis: Project Empath uses an advanced AI model to instantly "read" the face of the person on camera and identify key emotions like happiness, sadness, or neutrality.
 
-    Color Card Communication: We've created a simple, universal language using colored cards. A user can simply hold up a card to convey a specific need:
+    Discreet & Simple Feedback: The interface is designed to be a private coach, not a distraction. A clean, simple panel sits next to the video feed, providing an unobtrusive icon and a one-word description of the detected emotion (e.g., "😊 Happy," "😟 Sad").
 
-        🔴 Red Card: "I need help" or "I'm in pain."
+    Practice Mode for Skill Building: Users can practice in a safe environment by watching videos, movies, or talking with a friend or family member to learn and associate facial expressions with their corresponding emotions.
 
-        🟢 Green Card: "Yes" or "I'm okay."
-
-        🔵 Blue Card: "I'm thirsty/hungry."
-
-    Zero-Install, Accessible UI: The interface is clean, high-contrast, and designed to be understood at a glance from across a room. Because it runs in any modern web browser, it's instantly accessible on a tablet, laptop, or dedicated monitor.
-
-    Instant Feedback Loop: The live video feed is displayed alongside the AI's analysis, providing immediate confirmation that the user's expression or card has been correctly interpreted.
+    Accessible Anywhere: As a browser-based tool, Project Empath requires no installation and can be used on any laptop or tablet, making it a highly accessible solution.
 
 🚀 Scalability & Real-World Deployment
 
-This isn't just a hackathon prototype; it's the foundation for a tool that could be deployed in homes, hospitals, and care facilities tomorrow.
+This project is not just a proof-of-concept; it's the first step towards a comprehensive suite of assistive social tools.
 
 Realistic Deployment Strategy:
 
-    Phase 1 (Immediate): Deploy the application on a dedicated tablet or laptop in a patient's room. The static URL means caregivers can check the "status board" from a nursing station or their own phone on the same network.
+    Phase 1 (The Practice Tool - Deployed Now): The current application serves as a powerful training tool. Users can build their skills and confidence by analyzing faces in a controlled, low-stakes environment. It can be used in therapy sessions or for at-home practice.
 
-    Phase 2 (Mid-Term): Develop a secure, HIPAA-compliant cloud version. This allows families to remotely and passively check in on their loved one's emotional state, providing peace of mind without being intrusive.
+    Phase 2 (The Live Assistant - Browser Extension): The next logical step is a browser extension that integrates with video conferencing platforms like Google Meet, Zoom, and Microsoft Teams. The extension would overlay a discreet analysis panel directly onto the video call, providing real-time cues during online classes, remote work meetings, and virtual social events.
 
-    Phase 3 (Long-Term): Integrate with smart home and hospital systems. For example, detecting a "distressed" face or a "red card" could automatically trigger an alert to a caregiver's pager or turn on a smart light in the hallway.
+    Phase 3 (The Future - AR Integration): The ultimate vision for Project Empath is integration with AR (Augmented Reality) glasses. Imagine receiving subtle, heads-up display cues about a person's emotional state during an in-person conversation. This would be a life-changing tool, seamlessly blending digital assistance with the real world.
 
 Future Features Roadmap:
 
-    Customizable Cards: Allow caregivers to define their own meanings for different colors or even objects (e.g., holding up a favorite mug means "I want coffee").
+    Tone of Voice Analysis: Incorporate microphone input to analyze vocal tones (e.g., excited, calm, concerned) for a more complete picture of social cues.
 
-    Emotional Logging: Track emotional state over time to provide caregivers with valuable data on a patient's well-being, helping to identify patterns or triggers for distress.
+    Contextual Learning Prompts: Provide helpful, educational tips based on detected cues, such as, "This person is smiling. This often means they are happy or agree with you."
 
-    Auditory Feedback: Add optional sound cues for users with visual impairments.
+    Personalized Profiles: Allow users to track their progress and customize the tool's sensitivity and interface to their specific needs.
 
 🛠️ Tech Stack
 
@@ -57,7 +49,7 @@ Future Features Roadmap:
 
     Deployment: GitHub Pages (Frontend), Render (Backend)
 
-✅ Functionality: How to Run Project Iris
+✅ Functionality: How to Run Project Empath
 
 We've designed the project to be simple to set up and run.
 Prerequisites
@@ -80,19 +72,3 @@ pip install -r requirements.txt
 # Run the Flask server
 python app.py
 
-The server will start on http://127.0.0.1:5000. The first time you run it, the FER model will be downloaded automatically.
-2. Frontend Setup
-
-    Open the index.html file in your browser.
-
-    IMPORTANT: Ensure the API_URL constant in index.html points to your backend server's address (either your local address for testing or the deployed Render URL).
-
-    Grant the browser permission to access your webcam.
-
-The application is now running! You can test its functionality by smiling, looking sad, or showing red, green, and blue objects/cards to the camera.
-
-Presented by:
-[Your Name(s) Here]
-
-Hackathon:
-[Name of Hackathon Here]
