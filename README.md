@@ -4,9 +4,9 @@ Project Iris: The AI-Powered Accessibility Communicator
 
 A real-time, non-verbal communication bridge for those who need it most.
 
-    The Problem: A Silent Gap in Communication
+The Problem: A Silent Gap in Communication
 
-    For millions of individuals with non-verbal conditions—resulting from ALS, a stroke, severe autism, or other medical challenges—expressing fundamental needs and emotions is a daily struggle. Caregivers and loved ones are often left to guess, leading to frustration, misunderstanding, and a diminished quality of life for everyone involved. How can you communicate "I'm in pain" or "I'm happy" when you cannot speak?
+For millions of individuals with non-verbal conditions—resulting from ALS, a stroke, severe autism, or other medical challenges—expressing fundamental needs and emotions is a daily struggle. Caregivers and loved ones are often left to guess, leading to frustration, misunderstanding, and a diminished quality of life for everyone involved. How can you communicate "I'm in pain" or "I'm happy" when you cannot speak?
 
 Our Solution: Giving a Voice to the Voiceless
 
