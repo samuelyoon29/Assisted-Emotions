@@ -6,3 +6,4 @@ tensorflow
 gunicorn
 numpy
 moviepy
+imageio[ffmpeg]
