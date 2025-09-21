@@ -11,9 +11,9 @@ An AI-powered accessibility tool that provides real-time feedback on facial expr
 ---
 
 ## 🛠 Tech Stack
-- **Backend:** Python, Flask, OpenCV, FER (Facial Emotion Recognition), TensorFlow  
+- **Backend:** Python, Flask, OpenCV, Facial Emotion Recognition (FER), TensorFlow  
 - **Frontend:** HTML5, Tailwind CSS, JavaScript  
-- **Deployment:** GitHub Pages (Frontend), Render (Backend)
+- **Deployment:** GitHub Pages (Frontend), HuggingFace (Backend)
 
 ---
 
@@ -26,14 +26,3 @@ An AI-powered accessibility tool that provides real-time feedback on facial expr
 *(Insert diagram if you have one)*
 
 ---
-
-## 📦 Installation
-
-### Prerequisites
-- Python 3.8+  
-- A webcam  
-
-### Clone Repository
-```bash
-git clone https://github.com/samuelyoon29/Assisted-Emotions.git
-cd Assisted-Emotions
