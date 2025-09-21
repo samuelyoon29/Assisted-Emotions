@@ -4,28 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accessibility Aid</title>
+
+  <!-- Tailwind CSS for quick styling -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts (Inter) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #030712; /* bg-gray-950 */
+      background-color: #030712; /* Tailwind bg-gray-950 */
     }
+
+    /* Smooth transition for panel border/color updates */
     #status-panel, #video-container {
       transition: background-color 0.7s ease, border-color 0.7s ease;
     }
+
+    /* Icon (emoji) style */
     .icon {
       font-size: 5rem; /* 80px */
       line-height: 1;
     }
+
+    /* Mirror video so it's natural for the user */
     #webcam {
       width: 100%;
       height: auto;
-      border-radius: 0.75rem; /* rounded-xl */
-      transform: scaleX(-1); /* Mirror the video */
+      border-radius: 0.75rem; /* Tailwind rounded-xl */
+      transform: scaleX(-1);
     }
+
+    /* "Live" indicator with pulsing dot */
     .live-dot {
       animation: pulse 2s infinite;
     }
@@ -37,14 +50,16 @@
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen text-white p-4 md:p-8">
 
+  <!-- Title Section -->
   <div class="w-full max-w-5xl text-center mb-8">
     <h1 class="text-4xl font-bold text-cyan-400">Accessibility Aid</h1>
     <p class="text-gray-400 mt-2">Emotion detection with speech feedback.</p>
   </div>
 
+  <!-- Main Layout: Video Feed (left) + Emotion Panel (right) -->
   <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
 
-    <!-- Video Feed -->
+    <!-- Live Video Feed -->
     <div id="video-container" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold text-gray-300">Live Camera Feed</h2>
@@ -56,22 +71,27 @@
       <video id="webcam" autoplay playsinline muted></video>
     </div>
 
-    <!-- Emotional State -->
+    <!-- Emotional State Panel -->
     <div id="status-panel" class="bg-gray-900 p-6 rounded-2xl shadow-lg border-2 border-gray-700 flex flex-col items-center justify-center">
       <h2 class="text-2xl font-semibold text-gray-300 mb-4">Current Emotional State</h2>
+      <!-- Default emotion icon/text -->
       <div id="emotion-icon" class="icon">😐</div>
       <p id="emotion-text" class="text-xl mt-4 font-medium text-gray-300">Neutral</p>
+      <!-- Button for speech synthesis -->
       <button onclick="speakEmotion()" class="mt-6 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-6 rounded-lg">
         🔊 Read Emotion
       </button>
     </div>
   </main>
 
+  <!-- Status text below panels -->
   <p id="status" class="mt-8 text-gray-500 h-6 font-semibold">Connecting to AI Server...</p>
+
+  <!-- Hidden canvas used for capturing video frames -->
   <canvas id="canvas" style="display:none;"></canvas>
 
   <script>
-    // --- Elements ---
+    // --- DOM Elements ---
     const video = document.getElementById('webcam');
     const canvas = document.getElementById('canvas');
     const status = document.getElementById('status');
@@ -80,23 +100,29 @@
     const emotionIcon = document.getElementById('emotion-icon');
     const emotionText = document.getElementById('emotion-text');
 
-    // Backend endpoint
+    // Backend API endpoint for frame processing
     const API_URL = 'https://samuelyoon-projectclarity.hf.space/process_frame'; 
 
-    let isProcessing = false;
-    let isConnected = false;
+    // Flags to manage state
+    let isProcessing = false;   // Prevents multiple simultaneous requests
+    let isConnected = false;    // Tracks connection status to backend
 
+    // Emotion → UI mapping
     const EMOTION_MAP = {
-      happy: { icon: '😊', text: 'Happy', color: '#10B981' }, 
-      sad: { icon: '😟', text: 'Sad', color: '#3B82F6' }, 
-      neutral: { icon: '😐', text: 'Neutral', color: '#4B5563' }
+      happy:   { icon: '😊', text: 'Happy',   color: '#10B981' }, // green
+      sad:     { icon: '😟', text: 'Sad',     color: '#3B82F6' }, // blue
+      neutral: { icon: '😐', text: 'Neutral', color: '#4B5563' }  // gray
     };
 
+    /**
+     * Request webcam access and attach stream to <video>.
+     */
     async function setupWebcam() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
       } catch (err) {
+        // Handle webcam permission denial
         status.textContent = '❌ Error: Webcam permission denied.';
         status.classList.remove('text-gray-500');
         status.classList.add('text-red-400');
@@ -104,17 +130,24 @@
       }
     }
 
+    /**
+     * Capture current video frame → send to backend API → update UI.
+     */
     async function processFrame() {
-      if (video.readyState < 2 || isProcessing) return;
+      if (video.readyState < 2 || isProcessing) return; // Skip if not ready
       isProcessing = true;
 
+      // Draw current frame to hidden <canvas>
       const context = canvas.getContext('2d');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert frame → Base64 JPEG
       const imageData = canvas.toDataURL('image/jpeg', 0.8);
 
       try {
+        // Send frame to backend
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -124,6 +157,7 @@
 
         const data = await response.json();
 
+        // On first successful response → mark connection established
         if (!isConnected) {
           isConnected = true;
           status.textContent = '✅ Connection to AI Server Successful!';
@@ -136,9 +170,11 @@
           }, 2500);
         }
 
+        // Update UI with server response
         updateUI(data);
 
       } catch (error) {
+        // Handle failure to connect
         if (!isConnected) {
           status.textContent = '❌ Error: Cannot connect to the deployed backend.';
           status.classList.remove('text-gray-500');
@@ -150,6 +186,10 @@
       }
     }
 
+    /**
+     * Update emotion icon, text, and panel colors based on API result.
+     * @param {Object} data - API response { color, emotion }
+     */
     function updateUI(data) {
       const emotion = EMOTION_MAP[data.emotion] || EMOTION_MAP['neutral'];
       emotionIcon.textContent = emotion.icon;
@@ -160,7 +200,9 @@
       videoContainer.style.borderColor = panelBorderColor;
     }
 
-    // --- Speak Emotion ---
+    /**
+     * Use Web Speech API to read aloud the detected emotion.
+     */
     function speakEmotion() {
       const text = emotionText.textContent.trim();
       if (text) {
@@ -170,7 +212,10 @@
     }
 
     // --- Main Execution ---
+    // 1. Setup webcam
     setupWebcam();
+
+    // 2. Once video loads, periodically process frames every 500ms
     video.addEventListener('loadeddata', () => {
       setTimeout(() => {
         setInterval(processFrame, 500);
