@@ -5,8 +5,8 @@ An AI-powered accessibility tool that provides real-time feedback on facial expr
 ---
 
 ## 🚀 Demo
-[Live Demo](your-demo-link-here) | [Devpost Submission](link-here)  
-*(Insert GIF or screenshot of the app running)*
+[Live Demo](https://samuelyoon29.github.io/Project-Clarity/) | [Devpost Submission](https://devpost.com/software/project-clarity-x8n7ko)  
+<img width="1545" height="1006" alt="image" src="https://github.com/user-attachments/assets/0b029441-8686-4eaa-b5f7-a253c87d4e36" />
 
 ---
 
