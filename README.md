@@ -23,6 +23,4 @@ An AI-powered accessibility tool that provides real-time feedback on facial expr
 3. Response returned with predicted emotion  
 4. Frontend displays emoji + label and can trigger audio feedback  
 
-*(Insert diagram if you have one)*
-
 ---
